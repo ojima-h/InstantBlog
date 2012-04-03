@@ -12,15 +12,16 @@ class Application
     path_info = env["PATH_INFO"]
 
     path = "./files/" + (path_info == "/" ? "index.md" : path_info)
+    path.gsub!(%r{/+}, '/')
 
-    if not path =~ /\.md$/ and File::exists? path
+    if not (path =~ /\.md$/ or File.exists?(path))
       path = path + ".md"
     end
 
     if File::exists? path
       [200, {"Content-Type" => "text/html"}, [convert(path)]]
     else
-      [404, {"Content-Type" => "text/html"}, [File::read("public/404.html")]]
+      [404, {"Content-Type" => "text/html"}, [File.read("public/404.html")]]
     end
   end
 end

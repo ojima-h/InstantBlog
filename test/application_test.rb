@@ -15,7 +15,8 @@ class TC_Application < Test::Unit::TestCase
     f = File::open(file_name, "w")
     f.close
 
-    response = @obj.call({"PATH_INFO" => "/path/file", "SCRIPT_NAME" => "/path"})
+    #response = @obj.call({"PATH_INFO" => "/path/file", "SCRIPT_NAME" => "/path"})
+    response = @obj.call({"PATH_INFO" => "/file", "SCRIPT_NAME" => ""})
     assert_equal 200, response[0]
 
     File.delete(file_name)
