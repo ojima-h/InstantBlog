@@ -16,7 +16,8 @@ class Application
     m = match.match(path_info)
 
     rest = m[1]
-    path = (!rest || rest.empty? || rest[0] == ?/) ? "index.md" : rest
+    
+    path = (!rest || rest.empty? || rest == "/") ? "index.md" : rest
     path = "./files/" + path
 
     if not path =~ /\.md$/ and File::exists? path
