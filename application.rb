@@ -1,10 +1,11 @@
-require 'rdiscount'
+require 'bluefeather'
 
 class Application
   def convert(filename)
-    content = File::read(filename)
-    rd = RDiscount.new(content, :smart)
-    return rd.to_html
+    content = BlueFeather.parse_document_file(filename)
+    content.gsub(/\[\[([^\[\]]+)\]\]/) do |m|
+      "<a href=#{$1 + ".md"}>#{$1}</a>"
+    end
   end
 
   def call(env)
