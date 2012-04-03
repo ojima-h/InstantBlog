@@ -9,11 +9,15 @@ class Application
   end
 
   def call(env)
-    path = "./files" + (if env["PATH_INFO"] == '/'
-                          "/index.md"
-                        else
-                          env["PATH_INFO"]
-                        end)
+    path_info = env["PATH_INFO"]
+    script_name = env["SCRIPT_NAME"]
+    
+    match = Regexp.new("^#{Regexp.quote(script_name).gsub('/','/+')}(.*)")
+    m = match.match(path_info)
+
+    rest = m[1]
+    path = (!rest || rest.empty? || rest[0] == ?/) ? "index.md" : rest
+    path = "./files/" + path
 
     if not path =~ /\.md$/ and File::exists? path
       path = path + ".md"
