@@ -9,13 +9,15 @@ class Application
   end
 
   def call(env)
-    path = "./files" + env["PATH_INFO"]
+    path = "./files" + (if env["PATH_INFO"] == '/'
+                          "/index.md"
+                        else
+                          env["PATH_INFO"]
+                        end)
 
     if not path =~ /\.md$/ and File::exists? path
       path = path + ".md"
     end
-
-    p path
 
     if File::exists? path
       [200, {"Content-Type" => "text/html"}, [convert(path)]]
